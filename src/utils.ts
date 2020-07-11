@@ -8,16 +8,16 @@ import {
 } from './constants';
 import { JIRADetails } from './types';
 
-export const getJIRAIssueKey = (input: string, regexp: RegExp = JIRA_REGEX_MATCHER): string | null => {
+export const getJIRAIssueKeys = (input: string, regexp: RegExp = JIRA_REGEX_MATCHER): string[] | null => {
   const matches = input.toUpperCase().match(regexp);
-  const keys = matches?.length ? matches : [null];
-  return keys[0];
-};
-
-export const getJIRAIssueKeysByCustomRegexp = (input: string, numberRegexp: string, projectKey: string): string | null => {
-  const customRegexp = new RegExp(numberRegexp, 'g');
-  const ticketNumber = getJIRAIssueKey(input, customRegexp);
-  return ticketNumber ? `${projectKey}-${ticketNumber}` : null;
+  const keys = matches?.length
+    ? matches.map((key) => {
+        console.log('key', key);
+        return key.replace(' ', '-');
+      })
+    : null;
+  console.log(keys);
+  return keys;
 };
 
 export const shouldSkipBranch = (branch: string, additionalIgnorePattern?: string): boolean => {
@@ -59,14 +59,21 @@ ${HIDDEN_MARKER_END}
 ${bodyWithoutJiraDetails}`;
 };
 
-export const buildPRDescription = (details: JIRADetails) => {
+const ticketRow = (details: JIRADetails) => {
   const displayKey = details.key.toUpperCase();
+  `<tr>
+  <a href="${details.url}" title="${displayKey}" target="_blank"><img alt="${details.type.name}" src="${details.type.icon}" />${displayKey}</a>  ${details.summary}
+  </tr>
+  `;
+};
+
+export const buildPRDescription = (tickets: JIRADetails[]) => {
+  const allRows = tickets.map((ticket) => ticketRow(ticket)).join('');
+  console.log(allRows);
   return `
 <table>
-<td>
-  <a href="${details.url}" title="${displayKey}" target="_blank"><img alt="${details.type.name}" src="${details.type.icon}" />${displayKey}</a>  ${details.summary}
-  </td></table>
+  ${allRows}
+</table>
   <br />
- 
-`;
+  `;
 };

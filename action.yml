@@ -23,9 +23,12 @@ inputs:
       required: false
       default: ''
   custom-issue-number-regexp:
-      description: ' Custom regexp to extract issue number from branch name.'
+      description: 'Custom regexp to extract issue number from branch name.'
       required: false
       default: ''
+  encode-jira-token:
+    description: 'Encode JIRA token'
+    required: false
 runs:
   using: 'node12'
   main: 'lib/index.js'

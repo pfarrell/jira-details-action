@@ -91,7 +91,7 @@ export interface IActionInputs {
   GITHUB_TOKEN: string;
   BRANCH_IGNORE_PATTERN: string;
   JIRA_PROJECT_KEY: string;
-  CUSTOM_ISSUE_NUMBER_REGEXP: string;
+  ENCODE_JIRA_TOKEN: boolean;
 }
 
 export interface IGithubData {
