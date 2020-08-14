@@ -18,14 +18,6 @@ inputs:
     description: 'A regex to ignore running on certain branches, like production etc.'
     required: false
     default: ''
-  jira-project-key:
-      description: 'Key of project in jira. First part of issue key'
-      required: false
-      default: ''
-  custom-issue-number-regexp:
-      description: 'Custom regexp to extract issue number from branch name.'
-      required: false
-      default: ''
   encode-jira-token:
     description: 'Encode JIRA token'
     required: false

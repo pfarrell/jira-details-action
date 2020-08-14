@@ -40,12 +40,9 @@ describe('Github connector()', () => {
   });
 
   describe('getIssueKeyFromTitle()', () => {
-    describe('if some of JIRA_PROJECT_KEY and CUSTOM_ISSUE_NUMBER_REGEXP are empty', () => {
+    describe('happy flow', () => {
       const INPUTS_MOCK = {
         ...MOCK_INPUT,
-        ...{
-          JIRA_PROJECT_KEY: '',
-        },
       };
       const getJIRAIssueKeysReturnValue = ['DUMMY-01', 'DUMMY-02'];
 
@@ -61,30 +58,6 @@ describe('Github connector()', () => {
       });
 
       it('calls getJIRAIssueKey method with PR title if  USE_BRANCH_NAME !== true', () => {
-        (getInputs as any).mockImplementation(() => ({ ...INPUTS_MOCK, USE_BRANCH_NAME: false }));
-        connector = new GithubConnector();
-
-        expect(connector.getIssueKeysFromTitle()).toEqual(getJIRAIssueKeysReturnValue);
-        expect(getJIRAIssueKeys).toHaveBeenCalledWith(PR_TITLE);
-      });
-    });
-
-    describe('if both JIRA_PROJECT_KEY and CUSTOM_ISSUE_NUMBER_REGEXP are not empty', () => {
-      const INPUTS_MOCK = {
-        ...MOCK_INPUT,
-        ...{
-          JIRA_PROJECT_KEY: 'JIRA_PROJECT_KEY',
-          CUSTOM_ISSUE_NUMBER_REGEXP: 'CUSTOM_ISSUE_NUMBER_REGEXP',
-        },
-      };
-
-      const getJIRAIssueKeysReturnValue = ['DUMMY-01', 'DUMMY-02'];
-
-      beforeEach(() => {
-        (getJIRAIssueKeys as any).mockImplementation(() => getJIRAIssueKeysReturnValue);
-      });
-
-      it('calls getJIRAIssueKey method with PR title if USE_BRANCH_NAME !== true', () => {
         (getInputs as any).mockImplementation(() => ({ ...INPUTS_MOCK, USE_BRANCH_NAME: false }));
         connector = new GithubConnector();
 

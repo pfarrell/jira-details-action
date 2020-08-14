@@ -90,7 +90,6 @@ export interface IActionInputs {
   JIRA_BASE_URL: string;
   GITHUB_TOKEN: string;
   BRANCH_IGNORE_PATTERN: string;
-  JIRA_PROJECT_KEY: string;
   ENCODE_JIRA_TOKEN: boolean;
 }
 
