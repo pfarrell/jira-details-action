@@ -1,6 +1,6 @@
-name: 'jira-description'
+name: 'Jira Issue Details in PR'
 description: 'Add Jira issue details to your GitHub pull request.'
-author: 'cakeinpanic'
+author: 'alvisetrevisan'
 inputs:
   github-token:
     description: 'Token used to update PR description and add labels. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
@@ -22,7 +22,7 @@ inputs:
     description: 'Encode Jira token'
     required: false
 runs:
-  using: 'node12'
+  using: 'node14'
   main: 'lib/index.js'
 branding:
   icon: 'terminal'
