@@ -2,7 +2,7 @@ import { GithubConnector } from '../src/github-connector';
 import { GitHub } from '@actions/github/lib/github';
 import { IActionInputs } from '../src/types';
 import { describe } from 'jest-circus';
-import { getJIRAIssueKeys } from '../src/utils';
+import { getJiraIssueKeys } from '../src/utils';
 import { getInputs } from '../src/action-inputs';
 
 const MOCK_INPUT: Partial<IActionInputs> = {
@@ -47,14 +47,14 @@ describe('Github connector()', () => {
       const getJIRAIssueKeysReturnValue = ['DUMMY-01', 'DUMMY-02'];
 
       beforeEach(() => {
-        (getJIRAIssueKeys as any).mockImplementation(() => getJIRAIssueKeysReturnValue);
+        (getJiraIssueKeys as any).mockImplementation(() => getJIRAIssueKeysReturnValue);
       });
       it('calls getJIRAIssueKey method with branch name if USE_BRANCH_NAME === true', () => {
         (getInputs as any).mockImplementation(() => ({ ...INPUTS_MOCK, USE_BRANCH_NAME: true }));
         connector = new GithubConnector();
 
         expect(connector.getIssueKeysFromTitle()).toEqual(getJIRAIssueKeysReturnValue);
-        expect(getJIRAIssueKeys).toHaveBeenCalledWith(BRANCH_NAME);
+        expect(getJiraIssueKeys).toHaveBeenCalledWith(BRANCH_NAME);
       });
 
       it('calls getJIRAIssueKey method with PR title if  USE_BRANCH_NAME !== true', () => {
@@ -62,7 +62,7 @@ describe('Github connector()', () => {
         connector = new GithubConnector();
 
         expect(connector.getIssueKeysFromTitle()).toEqual(getJIRAIssueKeysReturnValue);
-        expect(getJIRAIssueKeys).toHaveBeenCalledWith(PR_TITLE);
+        expect(getJiraIssueKeys).toHaveBeenCalledWith(PR_TITLE);
       });
     });
   });

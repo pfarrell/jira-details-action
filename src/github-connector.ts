@@ -1,7 +1,7 @@
 import { getInputs } from './action-inputs';
-import { IGithubData, JIRADetails, PullRequestParams } from './types';
+import { IGithubData, JiraDetails, PullRequestParams } from './types';
 import { PullsUpdateParams } from '@octokit/rest';
-import { buildPRDescription, getJIRAIssueKeys, getPRDescription } from './utils';
+import { buildPRDescription as buildPrDescription, getJiraIssueKeys, getPRDescription as getPrDescription } from './utils';
 import { context, GitHub } from '@actions/github/lib/github';
 
 export class GithubConnector {
@@ -39,10 +39,10 @@ export class GithubConnector {
       return null;
     }
 
-    return getJIRAIssueKeys(stringToParse);
+    return getJiraIssueKeys(stringToParse);
   }
 
-  async updatePrDetails(tickets: JIRADetails[]) {
+  async updatePrDetails(tickets: JiraDetails[]) {
     const owner = this.githubData.owner;
     const repo = this.githubData.repository.name;
 
@@ -52,7 +52,7 @@ export class GithubConnector {
       owner,
       repo,
       pull_number: prNumber,
-      body: getPRDescription(prBody, buildPRDescription(tickets)),
+      body: getPrDescription(prBody, buildPrDescription(tickets)),
     };
 
     await this.client.pulls.update(prData);

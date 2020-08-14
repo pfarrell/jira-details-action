@@ -1,4 +1,4 @@
-import { getJIRAIssueKeys, getPRDescription, shouldSkipBranch } from '../src/utils';
+import { getJiraIssueKeys, getPRDescription, shouldSkipBranch } from '../src/utils';
 import { HIDDEN_MARKER_END, HIDDEN_MARKER_START, WARNING_MESSAGE_ABOUT_HIDDEN_MARKERS } from '../src/constants';
 
 jest.spyOn(console, 'log').mockImplementation(); // avoid actual console.log in test output
@@ -30,16 +30,16 @@ describe('shouldSkipBranch()', () => {
 
 describe('getJIRAIssueKeys()', () => {
   it('gets single jira key from different strings', () => {
-    expect(getJIRAIssueKeys('fix/login-protocol-es-43')).toEqual(['ES-43']);
-    expect(getJIRAIssueKeys('fix/login-protocol-ES 43')).toEqual(['ES-43']);
+    expect(getJiraIssueKeys('fix/login-protocol-es-43')).toEqual(['ES-43']);
+    expect(getJiraIssueKeys('fix/login-protocol-ES 43')).toEqual(['ES-43']);
 
-    expect(getJIRAIssueKeys('feature/missingKey')).toEqual(null);
-    expect(getJIRAIssueKeys('')).toEqual(null);
+    expect(getJiraIssueKeys('feature/missingKey')).toEqual(null);
+    expect(getJiraIssueKeys('')).toEqual(null);
   });
 
   it('gets multiple jira key from different strings', () => {
-    expect(getJIRAIssueKeys('[ES-43, ES-15] Feature description')).toEqual(['ES-43', 'ES-15']);
-    expect(getJIRAIssueKeys('feature/IMSW-203 IMSW 204 IMSW-555')).toEqual(['IMSW-203', 'IMSW-204', 'IMSW-555']);
+    expect(getJiraIssueKeys('[ES-43, ES-15] Feature description')).toEqual(['ES-43', 'ES-15']);
+    expect(getJiraIssueKeys('feature/IMSW-203 IMSW 204 IMSW-555')).toEqual(['IMSW-203', 'IMSW-204', 'IMSW-555']);
   });
 });
 

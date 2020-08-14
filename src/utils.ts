@@ -6,9 +6,9 @@ import {
   JIRA_REGEX_MATCHER,
   WARNING_MESSAGE_ABOUT_HIDDEN_MARKERS,
 } from './constants';
-import { JIRADetails } from './types';
+import { JiraDetails } from './types';
 
-export const getJIRAIssueKeys = (input: string, regexp: RegExp = JIRA_REGEX_MATCHER): string[] | null => {
+export const getJiraIssueKeys = (input: string, regexp: RegExp = JIRA_REGEX_MATCHER): string[] | null => {
   const matches = input.toUpperCase().match(regexp);
   return matches?.length ? matches.map((key) => key.replace(' ', '-')) : null;
 };
@@ -52,7 +52,7 @@ ${HIDDEN_MARKER_END}
 ${bodyWithoutJiraDetails}`;
 };
 
-const ticketRow = (details: JIRADetails): string => {
+const ticketRow = (details: JiraDetails): string => {
   const displayKey = details.key.toUpperCase();
 
   return `<tr><td>
@@ -61,7 +61,7 @@ const ticketRow = (details: JIRADetails): string => {
   `;
 };
 
-export const buildPRDescription = (tickets: JIRADetails[]): string => {
+export const buildPRDescription = (tickets: JiraDetails[]): string => {
   const allRows = tickets.map((ticket) => ticketRow(ticket)).join('');
 
   return `

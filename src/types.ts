@@ -14,7 +14,7 @@ export interface PullRequestParams {
   [key: string]: unknown;
 }
 
-export namespace JIRA {
+export namespace Jira {
   export interface IssueStatus {
     self: string;
     description: string;
@@ -69,7 +69,7 @@ export namespace JIRA {
   }
 }
 
-export interface JIRADetails {
+export interface JiraDetails {
   key: string;
   summary: string;
   url: string;
