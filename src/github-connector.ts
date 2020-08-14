@@ -29,8 +29,6 @@ export class GithubConnector {
     const branchName = this.headBranch;
     const stringToParse = USE_BRANCH_NAME ? branchName : prTitle;
 
-    console.log(`getIssueKeyFromTitle prTitle: ${prTitle}, stringToParse: ${stringToParse}`);
-
     if (!stringToParse) {
       if (USE_BRANCH_NAME) {
         console.log(`JIRA issue id is missing in your branch ${branchName}, doing nothing`);
@@ -57,7 +55,7 @@ export class GithubConnector {
       body: getPRDescription(prBody, buildPRDescription(tickets)),
     };
 
-    return await this.client.pulls.update(prData);
+    await this.client.pulls.update(prData);
   }
 
   private getGithubData(): IGithubData {

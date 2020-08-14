@@ -10,14 +10,7 @@ import { JIRADetails } from './types';
 
 export const getJIRAIssueKeys = (input: string, regexp: RegExp = JIRA_REGEX_MATCHER): string[] | null => {
   const matches = input.toUpperCase().match(regexp);
-  const keys = matches?.length
-    ? matches.map((key) => {
-        console.log('key', key);
-        return key.replace(' ', '-');
-      })
-    : null;
-  console.log(keys);
-  return keys;
+  return matches?.length ? matches.map((key) => key.replace(' ', '-')) : null;
 };
 
 export const shouldSkipBranch = (branch: string, additionalIgnorePattern?: string): boolean => {
@@ -37,7 +30,7 @@ export const shouldSkipBranch = (branch: string, additionalIgnorePattern?: strin
     return true;
   }
 
-  console.log(`branch '${branch}' does not match ignore pattern provided in 'skip-branches' option:`, ignorePattern);
+  console.log(`branch '${branch}' does not match ignore pattern provided in 'skip-branches' option, therefore action will continue running`);
   return false;
 };
 
@@ -59,17 +52,18 @@ ${HIDDEN_MARKER_END}
 ${bodyWithoutJiraDetails}`;
 };
 
-const ticketRow = (details: JIRADetails) => {
+const ticketRow = (details: JIRADetails): string => {
   const displayKey = details.key.toUpperCase();
-  `<tr>
+
+  return `<tr><td>
   <a href="${details.url}" title="${displayKey}" target="_blank"><img alt="${details.type.name}" src="${details.type.icon}" />${displayKey}</a>  ${details.summary}
-  </tr>
+  </tr></td>
   `;
 };
 
-export const buildPRDescription = (tickets: JIRADetails[]) => {
+export const buildPRDescription = (tickets: JIRADetails[]): string => {
   const allRows = tickets.map((ticket) => ticketRow(ticket)).join('');
-  console.log(allRows);
+
   return `
 <table>
   ${allRows}

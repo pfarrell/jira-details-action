@@ -6,8 +6,6 @@ import { JiraConnector } from './jira-connector';
 
 async function run(): Promise<void> {
   try {
-    console.log(`Start!`);
-
     const { BRANCH_IGNORE_PATTERN } = getInputs();
 
     const githubConnector = new GithubConnector();
@@ -19,7 +17,6 @@ async function run(): Promise<void> {
     }
 
     const skipBranch = shouldSkipBranch(githubConnector.headBranch, BRANCH_IGNORE_PATTERN);
-    console.log(`skipBranch: ${skipBranch}`);
 
     if (skipBranch) {
       console.log('Skipping action on this branch');
@@ -33,10 +30,13 @@ async function run(): Promise<void> {
       process.exit(1);
     }
 
-    console.log(`JIRA key -> ${issueKeys}`);
-
+    console.log(`Fetching details for JIRA keys ${issueKeys}`);
     const tickets = await Promise.all(issueKeys.map((issueKey) => jiraConnector.getTicketDetails(issueKey)));
+
+    console.log(`Updating PR description with the following JIRA ticket info: ${JSON.stringify(tickets)}`);
     await githubConnector.updatePrDetails(tickets);
+
+    console.log('Done!');
   } catch (error) {
     console.log({ error });
     core.setFailed(error.message);
