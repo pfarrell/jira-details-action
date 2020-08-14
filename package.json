@@ -1,7 +1,7 @@
 {
-  "name": "jira-description-action",
-  "version": "0.0.1",
-  "description": "Add JIRA issue details to your GitHub pull request",
+  "name": "jira-details-action",
+  "version": "0.2.0",
+  "description": "Add Jira issue details to your GitHub pull request",
   "main": "lib/index.js",
   "scripts": {
     "build": "engines-ok && ncc build src/main.ts -o lib -m",
@@ -11,10 +11,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cakeinpanic/jira-description-action"
+    "url": "git+https://github.com/cakeinpanic/jira-details-action"
   },
   "engines": {
-    "node": ">= 13",
+    "node": ">= 12",
     "npm": ">= 6"
   },
   "keywords": [

@@ -14,7 +14,7 @@ export interface PullRequestParams {
   [key: string]: unknown;
 }
 
-export namespace JIRA {
+export namespace Jira {
   export interface IssueStatus {
     self: string;
     description: string;
@@ -69,7 +69,7 @@ export namespace JIRA {
   }
 }
 
-export interface JIRADetails {
+export interface JiraDetails {
   key: string;
   summary: string;
   url: string;
@@ -90,8 +90,7 @@ export interface IActionInputs {
   JIRA_BASE_URL: string;
   GITHUB_TOKEN: string;
   BRANCH_IGNORE_PATTERN: string;
-  JIRA_PROJECT_KEY: string;
-  CUSTOM_ISSUE_NUMBER_REGEXP: string;
+  ENCODE_JIRA_TOKEN: boolean;
 }
 
 export interface IGithubData {

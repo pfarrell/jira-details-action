@@ -1,7 +1,7 @@
 import { getInputs } from './action-inputs';
-import { IGithubData, JIRADetails, PullRequestParams } from './types';
+import { IGithubData, JiraDetails, PullRequestParams } from './types';
 import { PullsUpdateParams } from '@octokit/rest';
-import { buildPRDescription, getJIRAIssueKey, getJIRAIssueKeysByCustomRegexp, getPRDescription } from './utils';
+import { buildPRDescription as buildPrDescription, getJiraIssueKeys, getPRDescription as getPrDescription } from './utils';
 import { context, GitHub } from '@actions/github/lib/github';
 
 export class GithubConnector {
@@ -22,10 +22,9 @@ export class GithubConnector {
     return this.githubData.pullRequest.head.ref;
   }
 
-  getIssueKeyFromTitle(): string | null {
-    const { JIRA_PROJECT_KEY, CUSTOM_ISSUE_NUMBER_REGEXP, USE_BRANCH_NAME } = getInputs();
+  getIssueKeysFromTitle(): string[] | null {
+    const { USE_BRANCH_NAME } = getInputs();
 
-    const shouldUseCustomRegexp = !!CUSTOM_ISSUE_NUMBER_REGEXP && !!JIRA_PROJECT_KEY;
     const prTitle = this.githubData.pullRequest.title;
     const branchName = this.headBranch;
     const stringToParse = USE_BRANCH_NAME ? branchName : prTitle;
@@ -40,12 +39,10 @@ export class GithubConnector {
       return null;
     }
 
-    return shouldUseCustomRegexp
-      ? getJIRAIssueKeysByCustomRegexp(stringToParse, CUSTOM_ISSUE_NUMBER_REGEXP, JIRA_PROJECT_KEY)
-      : getJIRAIssueKey(stringToParse);
+    return getJiraIssueKeys(stringToParse);
   }
 
-  async updatePrDetails(details: JIRADetails) {
+  async updatePrDetails(tickets: JiraDetails[]) {
     const owner = this.githubData.owner;
     const repo = this.githubData.repository.name;
 
@@ -55,10 +52,10 @@ export class GithubConnector {
       owner,
       repo,
       pull_number: prNumber,
-      body: getPRDescription(prBody, buildPRDescription(details)),
+      body: getPrDescription(prBody, buildPrDescription(tickets)),
     };
 
-    return await this.client.pulls.update(prData);
+    await this.client.pulls.update(prData);
   }
 
   private getGithubData(): IGithubData {

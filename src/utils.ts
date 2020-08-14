@@ -6,18 +6,11 @@ import {
   JIRA_REGEX_MATCHER,
   WARNING_MESSAGE_ABOUT_HIDDEN_MARKERS,
 } from './constants';
-import { JIRADetails } from './types';
+import { JiraDetails } from './types';
 
-export const getJIRAIssueKey = (input: string, regexp: RegExp = JIRA_REGEX_MATCHER): string | null => {
+export const getJiraIssueKeys = (input: string, regexp: RegExp = JIRA_REGEX_MATCHER): string[] | null => {
   const matches = input.toUpperCase().match(regexp);
-  const keys = matches?.length ? matches : [null];
-  return keys[0];
-};
-
-export const getJIRAIssueKeysByCustomRegexp = (input: string, numberRegexp: string, projectKey: string): string | null => {
-  const customRegexp = new RegExp(numberRegexp, 'g');
-  const ticketNumber = getJIRAIssueKey(input, customRegexp);
-  return ticketNumber ? `${projectKey}-${ticketNumber}` : null;
+  return matches?.length ? matches.map((key) => key.replace(' ', '-')) : null;
 };
 
 export const shouldSkipBranch = (branch: string, additionalIgnorePattern?: string): boolean => {
@@ -37,7 +30,7 @@ export const shouldSkipBranch = (branch: string, additionalIgnorePattern?: strin
     return true;
   }
 
-  console.log(`branch '${branch}' does not match ignore pattern provided in 'skip-branches' option:`, ignorePattern);
+  console.log(`branch '${branch}' does not match ignore pattern provided in 'skip-branches' option, therefore action will continue running`);
   return false;
 };
 
@@ -59,14 +52,22 @@ ${HIDDEN_MARKER_END}
 ${bodyWithoutJiraDetails}`;
 };
 
-export const buildPRDescription = (details: JIRADetails) => {
+const ticketRow = (details: JiraDetails): string => {
   const displayKey = details.key.toUpperCase();
+
+  return `<tr><td>
+  <a href="${details.url}" title="${displayKey}" target="_blank"><img alt="${details.type.name}" src="${details.type.icon}" />${displayKey}</a>  ${details.summary}
+  </tr></td>
+  `;
+};
+
+export const buildPRDescription = (tickets: JiraDetails[]): string => {
+  const allRows = tickets.map((ticket) => ticketRow(ticket)).join('');
+
   return `
 <table>
-<td>
-  <a href="${details.url}" title="${displayKey}" target="_blank"><img alt="${details.type.name}" src="${details.type.icon}" />${displayKey}</a>  ${details.summary}
-  </td></table>
+  ${allRows}
+</table>
   <br />
- 
-`;
+  `;
 };

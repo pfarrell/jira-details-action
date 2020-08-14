@@ -16,20 +16,27 @@ async function run(): Promise<void> {
       process.exit(0);
     }
 
-    if (shouldSkipBranch(githubConnector.headBranch, BRANCH_IGNORE_PATTERN)) {
-      process.exit(0);
+    const skipBranch = shouldSkipBranch(githubConnector.headBranch, BRANCH_IGNORE_PATTERN);
+
+    if (skipBranch) {
+      console.log('Skipping action on this branch');
+      process.exit(1);
     }
 
-    const issueKey = githubConnector.getIssueKeyFromTitle();
+    const issueKeys = githubConnector.getIssueKeysFromTitle();
 
-    if (!issueKey) {
-      process.exit(0);
+    if (!issueKeys) {
+      console.log('Could not find any issue keys');
+      process.exit(1);
     }
 
-    console.log(`JIRA key -> ${issueKey}`);
+    console.log(`Fetching details for JIRA keys ${issueKeys}`);
+    const tickets = await Promise.all(issueKeys.map((issueKey) => jiraConnector.getTicketDetails(issueKey)));
 
-    const details = await jiraConnector.getTicketDetails(issueKey);
-    await githubConnector.updatePrDetails(details);
+    console.log(`Updating PR description with the following JIRA ticket info: ${JSON.stringify(tickets)}`);
+    await githubConnector.updatePrDetails(tickets);
+
+    console.log('Done!');
   } catch (error) {
     console.log({ error });
     core.setFailed(error.message);

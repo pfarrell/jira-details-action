@@ -1,15 +1,15 @@
-name: 'jira-description'
-description: 'Add JIRA issue details to your GitHub pull request.'
-author: 'cakeinpanic'
+name: 'Jira Issue Details in PR'
+description: 'Add Jira issue details to your GitHub pull request.'
+author: 'alvisetrevisan'
 inputs:
   github-token:
     description: 'Token used to update PR description and add labels. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
     required: true
   jira-token:
-    description: 'API Token used to access the JIRA REST API. Must have read access to your JIRA Projects & Issues. Format: <jira username>:<jira token>'
+    description: 'API Token used to access the Jira REST API. Must have read access to your Jira Projects & Issues. Format: either <jira username>:<jira token>, or the same string but base'
     required: true
   jira-base-url:
-    description: 'The subdomain of JIRA cloud that you use to access it. Ex: "https://your-domain.atlassian.net"'
+    description: 'The subdomain of Jira cloud that you use to access it. Ex: "https://your-domain.atlassian.net"'
     required: true
   use-branch-name:
     description: 'Set true if you want to use branch name for getting issue key'
@@ -18,14 +18,9 @@ inputs:
     description: 'A regex to ignore running on certain branches, like production etc.'
     required: false
     default: ''
-  jira-project-key:
-      description: 'Key of project in jira. First part of issue key'
-      required: false
-      default: ''
-  custom-issue-number-regexp:
-      description: ' Custom regexp to extract issue number from branch name.'
-      required: false
-      default: ''
+  encode-jira-token:
+    description: 'Encode Jira token'
+    required: false
 runs:
   using: 'node12'
   main: 'lib/index.js'

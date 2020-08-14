@@ -1,6 +1,6 @@
 import { getInputs } from './action-inputs';
 import axios, { AxiosInstance } from 'axios';
-import { JIRA, JIRADetails } from './types';
+import { Jira, JiraDetails } from './types';
 
 export class JiraConnector {
   client: AxiosInstance;
@@ -8,12 +8,12 @@ export class JiraConnector {
   JIRA_BASE_URL: string;
 
   constructor() {
-    const { JIRA_TOKEN, JIRA_BASE_URL } = getInputs();
+    const { JIRA_TOKEN, JIRA_BASE_URL, ENCODE_JIRA_TOKEN } = getInputs();
 
     this.JIRA_BASE_URL = JIRA_BASE_URL;
     this.JIRA_TOKEN = JIRA_TOKEN;
 
-    const encodedToken = Buffer.from(JIRA_TOKEN).toString('base64');
+    const encodedToken = ENCODE_JIRA_TOKEN ? Buffer.from(JIRA_TOKEN).toString('base64') : JIRA_TOKEN;
 
     this.client = axios.create({
       baseURL: `${JIRA_BASE_URL}/rest/api/3`,
@@ -22,8 +22,8 @@ export class JiraConnector {
     });
   }
 
-  async getTicketDetails(key: string): Promise<JIRADetails> {
-    const issue: JIRA.Issue = await this.getIssue(key);
+  async getTicketDetails(key: string): Promise<JiraDetails> {
+    const issue: Jira.Issue = await this.getIssue(key);
     const {
       fields: { issuetype: type, project, summary },
     } = issue;
@@ -44,9 +44,9 @@ export class JiraConnector {
     };
   }
 
-  async getIssue(id: string): Promise<JIRA.Issue> {
+  async getIssue(id: string): Promise<Jira.Issue> {
     const url = `/issue/${id}?fields=project,summary,issuetype`;
-    const response = await this.client.get<JIRA.Issue>(url);
+    const response = await this.client.get<Jira.Issue>(url);
     return response.data;
   }
 }
