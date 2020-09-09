@@ -12,7 +12,7 @@ async function run(): Promise<void> {
     const jiraConnector = new JiraConnector();
 
     if (!githubConnector.isPRAction) {
-      console.log('This action meant to be run only on PRs');
+      console.log('This action is meant to be run only on PRs');
       process.exit(0);
     }
 
@@ -20,14 +20,14 @@ async function run(): Promise<void> {
 
     if (skipBranch) {
       console.log('Skipping action on this branch');
-      process.exit(1);
+      process.exit(0);
     }
 
     const issueKeys = githubConnector.getIssueKeysFromTitle();
 
     if (!issueKeys) {
       console.log('Could not find any issue keys');
-      process.exit(1);
+      process.exit(0);
     }
 
     console.log(`Fetching details for JIRA keys ${issueKeys}`);

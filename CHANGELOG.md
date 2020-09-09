@@ -1,3 +1,6 @@
+## 0.3.0
+* Don't exit with error when skipping action or no JIRA issue could be found
+  
 ## 0.2.0
 * Add option to skip encoding of Jira token
 * Change default regex to allow spaces between project and issue number
