@@ -46,10 +46,10 @@ export const getPRDescription = (oldBody: string, details: string): string => {
   const bodyWithoutJiraDetails = oldBody.replace(rg, '');
 
   return `${WARNING_MESSAGE_ABOUT_HIDDEN_MARKERS}
+ ${bodyWithoutJiraDetails}
 ${HIDDEN_MARKER_START}
 ${details}
-${HIDDEN_MARKER_END}
-${bodyWithoutJiraDetails}`;
+${HIDDEN_MARKER_END}`;
 };
 
 const ticketRow = (details: JiraDetails): string => {
